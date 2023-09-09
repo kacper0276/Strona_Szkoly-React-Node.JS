@@ -1,0 +1,31 @@
+.main_container {
+  width: 100vw;
+  height: 95vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.album_select {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 50px;
+  gap: 20px;
+}
+
+@media only screen and (max-width: 1000px) {
+  .album_select {
+    margin-top: 0px;
+    display: flex;
+    justify-content: safe center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .main_container {
+    display: table;
+    height: fit-content;
+  }
+}

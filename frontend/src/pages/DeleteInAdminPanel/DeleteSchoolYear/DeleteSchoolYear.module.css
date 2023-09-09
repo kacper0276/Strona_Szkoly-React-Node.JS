@@ -1,0 +1,111 @@
+.main_container {
+  width: 100%;
+  height: 100%;
+}
+.select_style {
+  width: 25%;
+}
+
+.mini_img {
+  width: 100%;
+  height: 50%;
+  margin-bottom: 15px;
+}
+
+.mini_img > img {
+  width: 50%;
+  height: 100%;
+}
+
+.input_file::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.input_file::before {
+  content: "Wybierz zdjęcie";
+  display: inline-block;
+  background: linear-gradient(to left, #fffffe, #1b70df);
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 10pt;
+  color: black;
+  margin-left: 25%;
+}
+.input_file:hover::before {
+  border-color: rgb(59, 59, 59);
+}
+.input_file:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
+.buttons {
+  margin-bottom: 10px;
+}
+
+.button_style {
+  padding: 15px;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+.select_style {
+  /* Default style */
+  background-color: white;
+  border: thin solid blue;
+  border-radius: 4px;
+  display: inline-block;
+  font: inherit;
+  line-height: 1.5em;
+  padding: 0.5em 3.5em 0.5em 1em;
+
+  /* Delete basic arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: "";
+
+  /* Arrow */
+  background-image: linear-gradient(45deg, transparent 50%, gray 50%),
+    linear-gradient(135deg, gray 50%, transparent 50%),
+    radial-gradient(#ddd 70%, transparent 72%);
+  background-position: calc(100% - 20px) calc(1em + 2px),
+    calc(100% - 15px) calc(1em + 2px), calc(100% - 0.5em) 0.5em;
+  background-size: 5px 5px, 5px 5px, 1.5em 1.5em;
+  background-repeat: no-repeat;
+}
+
+.select_style:focus {
+  background-image: linear-gradient(45deg, white 50%, transparent 50%),
+    linear-gradient(135deg, transparent 50%, white 50%),
+    radial-gradient(gray 70%, transparent 72%);
+  background-position: calc(100% - 15px) 1em, calc(100% - 20px) 1em,
+    calc(100% - 0.5em) 0.5em;
+  background-size: 5px 5px, 5px 5px, 1.5em 1.5em;
+  background-repeat: no-repeat;
+  border-color: green;
+  outline: 0;
+}
+
+@media only screen and (max-width: 1000px) {
+  .select_style {
+    width: 100%;
+    float: left;
+  }
+
+  .buttons {
+    width: 100%;
+    float: left;
+  }
+  .mini_img {
+    float: left;
+    height: 50%;
+  }
+}

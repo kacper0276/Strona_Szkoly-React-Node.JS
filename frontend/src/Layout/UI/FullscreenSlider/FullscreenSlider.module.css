@@ -1,0 +1,124 @@
+.slider_div {
+  width: 100vw;
+  height: calc(100vh - 350px);
+  overflow: hidden;
+  background: black;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  margin: 50px 0;
+}
+
+/* .slider_div > img {
+  width: 95%;
+  height: 95%;
+  float: left;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, 0);
+} */
+
+.img_vertical {
+  width: 50%;
+  height: 90%;
+  float: left;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.img_horizontal {
+  width: 95%;
+  height: 90%;
+  float: left;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+/* Array div */
+.right_array {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 50px;
+  height: 50px;
+}
+
+.left_array > button,
+.right_array > button {
+  background: transparent;
+  border: none;
+}
+
+.left_array {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 50px;
+  height: 50px;
+  z-index: 10000;
+}
+
+.download_button {
+  background: transparent;
+  border: none;
+  padding: 15px;
+}
+
+.play_button {
+  background: transparent;
+  border: none;
+  padding: 15px;
+  cursor: pointer;
+}
+
+.buttons_div {
+  float: left;
+  width: 100%;
+  z-index: 1001;
+  position: relative;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+@media only screen and (max-width: 1000px) {
+  .img_vertical {
+    width: 50%;
+    height: 95%;
+    float: left;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+
+  .img_horizontal {
+    width: 85%;
+    height: 95%;
+    float: left;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+}
+
+.arrow_style {
+  width: 50px;
+  height: 50px;
+  fill: white;
+  cursor: pointer;
+}
+
+.download {
+  width: 16px;
+  height: 16px;
+  fill: white;
+  cursor: pointer;
+}
+
+.other_buttons {
+  width: 20px;
+  height: 20px;
+  fill: white;
+  cursor: pointer;
+}

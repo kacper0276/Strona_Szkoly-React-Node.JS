@@ -1,0 +1,33 @@
+.gallery_component {
+  height: 95vh;
+  width: 100vw;
+  color: white;
+}
+
+.year_school_select {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  gap: 20px;
+}
+
+@media only screen and (max-width: 1000px) {
+  .year_school_select {
+    margin-top: 0px;
+    display: flex;
+    justify-content: safe center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .gallery_component {
+    display: table;
+    height: fit-content;
+  }
+
+  strong {
+    margin-top: 30px;
+  }
+}

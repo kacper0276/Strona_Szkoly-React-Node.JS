@@ -1,0 +1,39 @@
+.footer {
+  width: 100vw;
+  height: 5vh;
+  overflow: auto;
+  background: transparent;
+  color: #fff;
+}
+
+@media screen and (min-width: 500px) {
+  .footer > p {
+    float: left;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+}
+
+.href {
+  color: #fff;
+  text-decoration: none;
+}
+
+.href:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.logout {
+  display: inline;
+  color: #fff;
+  cursor: pointer;
+}
+
+.logout:hover {
+  color: rgba(255, 255, 255, 0.7);
+}

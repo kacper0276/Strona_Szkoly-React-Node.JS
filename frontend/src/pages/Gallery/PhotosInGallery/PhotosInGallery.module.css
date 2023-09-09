@@ -1,0 +1,10 @@
+.main_container {
+  height: 95vh;
+  width: 100vw;
+}
+
+.slider {
+  margin-top: 50px;
+  height: auto;
+  width: 100%;
+}
