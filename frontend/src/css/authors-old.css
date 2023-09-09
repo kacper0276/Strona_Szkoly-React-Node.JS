@@ -1,0 +1,72 @@
+.main-authors-cnt{
+    width: 100vw;
+    height: 100vh;    
+    background-color: rgba(80, 80, 90, 1);
+}
+.auth-cube-cnt{
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    perspective: 10000px;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+}
+.auth-cube{
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    position: relative;
+    transform: translateZ(-25vh) rotateX(0deg) rotateY(0deg);
+}
+.auth-panel{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+.front{
+    transform: translateZ(25vh);
+    background-color: white;
+}
+.top{
+    background-color: blueviolet;
+    transform: translateY(-25vh) rotateX(90deg);
+}
+.bottom{
+    background-color: blue;
+    transform: translateY(25vh) rotateX(90deg) rotateX(180deg);
+}
+.from-top1{
+    /* animation: from-top 1s cubic-bezier(1,0,0,1.5) .5s forwards; */
+    animation: from-top 1s ease .5s forwards;
+}
+.from-bottom1{
+    animation: from-bottom 1s ease-in-out 1s forwards;
+}
+.from-bottom2{
+    animation: from-bottom 1s ease 2s forwards;
+}
+.from-top2{
+    animation: from-top 1s ease-out 2.5s forwards;
+}
+@keyframes from-top{
+    from{
+        transform: translateZ(-25vh) rotateX(0deg);
+    }
+    to{
+        transform: translateZ(-25vh) rotateX(-90deg);
+    }
+}
+@keyframes from-bottom{
+    from{
+        transform: translateZ(-25vh) rotateX(0deg);
+    }
+    to{
+        transform: translateZ(-25vh) rotateX(90deg);
+    }
+}
+/* .left{
+    background-color: yellow;
+    transform: rotateY(90deg) translateZ(-25vw);
+    left: 0;
+} */
