@@ -11,6 +11,7 @@ export default function Slider(props) {
   const [iterator, setIterator] = useState(1);
   const slider = useRef();
   const downloadButton = useRef();
+  const fullScreen = useRef();
 
   useEffect(() => {
     setImage(props.img);
@@ -41,9 +42,23 @@ export default function Slider(props) {
     downloadButton.current.href = `/photos/${image[iterator]}`;
   };
 
+  function toggleFullscreen() {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+      // slider.current.style.height = slider.current.naturalHeight + "px";
+      // slider.current.style.width = slider.current.naturalWidth + "px";
+      slider.current.style.height = null;
+      slider.current.style.width = null;
+    } else {
+      fullScreen.current.requestFullscreen().catch(console.log());
+      slider.current.style.height = "100vh";
+      slider.current.style.width = "100vw";
+    }
+  }
+
   return !loading ? (
     <>
-      <div className={`${styles.slider_div}`}>
+      <div className={`${styles.slider_div}`} ref={fullScreen}>
         <div className={`${styles.left_array}`}>
           <button onClick={previousPhoto}>
             <svg
@@ -136,7 +151,7 @@ export default function Slider(props) {
             )}
           </button>
           <button
-            onClick={() => setOpenFullscreen(true)}
+            onClick={() => toggleFullscreen()}
             className={`${styles.play_button}`}
           >
             <svg

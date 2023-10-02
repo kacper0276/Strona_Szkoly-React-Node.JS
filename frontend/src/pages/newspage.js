@@ -57,9 +57,9 @@ const NewsPage = () => {
         setTitle(`Aktualności: ${response.title}`);
         let arr = [];
         response.obj.forEach((option) => {
-          if (!response.title.includes(option.path))
+          if (!response.title.includes(option.path.trim())) {
             arr.push(<option value={option.path}>{option.name}</option>);
-          else {
+          } else {
             arr.push(
               <option value={option.path} selected>
                 {option.name}
@@ -83,6 +83,7 @@ const NewsPage = () => {
           response.data.forEach((news) => {
             temp.push(
               <News
+                alt={news.alt}
                 title={news.title}
                 date={news.date}
                 img={news.img}
@@ -106,7 +107,7 @@ const NewsPage = () => {
         setTitle(`Aktualności: ${response.title}`);
         let arr = [];
         response.obj.forEach((option) => {
-          if (!response.title.includes(option.path))
+          if (!response.title.includes(option.path.trim()))
             arr.push(<option value={option.path}>{option.name}</option>);
           else {
             arr.push(

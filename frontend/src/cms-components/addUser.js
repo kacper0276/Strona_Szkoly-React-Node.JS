@@ -9,23 +9,19 @@ const AddUser = () => {
   const location = useLocation();
   const [message, setMessage] = useState("");
   const [loading, setLoadnig] = useState(true);
+  const [loadingClass, setLoadingClass] = useState(true);
   const [usersList, setUsersList] = useState([]);
   const [newSequence, setNewSequence] = useState("");
   const [editShow, setEditShow] = useState(false);
   const [editId, setEditId] = useState(null);
-
-  const clasesUser = [
+  const [clasesUser, setClasesUser] = useState([
     {
       value: "admin",
       label: "admin",
     },
     {
-      value: "addNews",
-      label: "Dodawanie aktualności",
-    },
-    {
-      value: "news",
-      label: "Aktualności (dodawanie edycja usuwanie)",
+      value: "newsall",
+      label: "Aktualności",
     },
     {
       value: "menu",
@@ -40,7 +36,7 @@ const AddUser = () => {
       label: "Zarządzanie budynek",
     },
     {
-      value: "kafle",
+      value: "kafleall",
       label: "Kafle w budynku",
     },
     {
@@ -59,13 +55,67 @@ const AddUser = () => {
       value: "galeria",
       label: "Galeria",
     },
-  ];
+    {
+      value: "newssport",
+      label: "Sport - Aktualności",
+    },
+    {
+      value: "newsmain",
+      label: "Główna - Aktualności",
+    },
+  ]);
+
+  const customStyles = {
+    menu: (css) => ({
+      ...css,
+      width: "500px",
+    }),
+    control: (css) => ({ ...css, display: "inline-flex " }),
+    valueContainer: (css) => ({
+      ...css,
+    }),
+  };
+
+  async function fetchBuildings() {
+    axios.get(`${url}/getallbuildings`).then((res) => {
+      console.log(res.data.buildings);
+      res.data.buildings.forEach((building) => {
+        if (
+          building.name.toLowerCase().replace(/\s+/g, "") == "szkołabranżowai"
+        ) {
+          var obj = {
+            value: `szkołabranżowanews`,
+            label: `${building.name} - Aktualności`,
+          };
+          var obj1 = {
+            value: `szkołabranżowakafle`,
+            label: `${building.name} - Kafle`,
+          };
+        } else {
+          var obj = {
+            value: `${building.name.toLowerCase().replace(/\s+/g, "")}news`,
+            label: `${building.name} - Aktualności`,
+          };
+          var obj1 = {
+            value: `${building.name.toLowerCase().replace(/\s+/g, "")}kafle`,
+            label: `${building.name} - Kafle`,
+          };
+        }
+
+        let arr = clasesUser;
+        arr.push(obj);
+        arr.push(obj1);
+        setClasesUser(arr);
+      });
+      setLoadingClass(false);
+    });
+  }
 
   async function fetchUsers() {
     axios.get(`${url}/allusers`).then((res) => {
       setUsersList(res.data.data);
-      setLoadnig(false);
     });
+    setLoadnig(false);
   }
 
   useEffect(() => {
@@ -75,6 +125,10 @@ const AddUser = () => {
   useEffect(() => {
     fetchUsers();
   }, [editShow]);
+
+  useEffect(() => {
+    fetchBuildings();
+  }, []);
 
   function handleChange(selectedOption) {
     setNewSequence(selectedOption);
@@ -160,7 +214,16 @@ const AddUser = () => {
             <h3>Potwierdź hasło:</h3>
             <input type={"password"} id="secPass" required />
             <h3>Klasa użytkownika:</h3>
-            <Select isMulti options={clasesUser} onChange={handleChange} />
+            {loadingClass ? (
+              <p>Ładowanie klass</p>
+            ) : (
+              <Select
+                isMulti
+                options={clasesUser}
+                onChange={handleChange}
+                styles={customStyles}
+              />
+            )}
             <input type={"submit"} value={"+ Dodaj użytkownika"} />
           </form>
           <form
@@ -172,75 +235,77 @@ const AddUser = () => {
             {loading ? (
               <p>Ładowanie danych...</p>
             ) : (
-              <table
-                style={{
-                  border: "1px solid black",
-                }}
-              >
-                <thead>
-                  <tr>
-                    <td>ID</td>
-                    <td>Nazwa użytkownika</td>
-                    <td>Klasy użytkownika</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  {usersList.map((user, key) => {
-                    return (
-                      <tr key={key}>
-                        <td
-                          style={{
-                            border: "1px solid black",
-                          }}
-                        >
-                          {user.id}
-                        </td>
-                        <td
-                          style={{
-                            border: "1px solid black",
-                          }}
-                        >
-                          {user.login}
-                        </td>
-                        <td
-                          style={{
-                            border: "1px solid black",
-                          }}
-                        >
-                          {user.klasa}
-                        </td>
-                        <td>
-                          <button
-                            className="footer-delete-button"
-                            onClick={(e) => {
-                              if (
-                                window.confirm(
-                                  "Na pewno chcesz usunąć ten rekord?"
-                                )
-                              ) {
-                                delUser(e, user.id);
-                              }
+              <>
+                <table
+                  style={{
+                    border: "1px solid black",
+                  }}
+                >
+                  <thead>
+                    <tr>
+                      <td>ID</td>
+                      <td>Nazwa użytkownika</td>
+                      <td>Klasy użytkownika</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {usersList.map((user, key) => {
+                      return (
+                        <tr key={key}>
+                          <td
+                            style={{
+                              border: "1px solid black",
                             }}
                           >
-                            - Usuń Użytkownika
-                          </button>
-                        </td>
-                        <td>
-                          <button
-                            className="footer-delete-button"
-                            onClick={(e) => {
-                              setEditId(user.id);
-                              setEditShow(true);
+                            {user.id}
+                          </td>
+                          <td
+                            style={{
+                              border: "1px solid black",
                             }}
                           >
-                            - Edytuj Użytkownika
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                            {user.login}
+                          </td>
+                          <td
+                            style={{
+                              border: "1px solid black",
+                            }}
+                          >
+                            {user.klasa}
+                          </td>
+                          <td>
+                            <button
+                              className="footer-delete-button"
+                              onClick={(e) => {
+                                if (
+                                  window.confirm(
+                                    "Na pewno chcesz usunąć ten rekord?"
+                                  )
+                                ) {
+                                  delUser(e, user.id);
+                                }
+                              }}
+                            >
+                              - Usuń Użytkownika
+                            </button>
+                          </td>
+                          <td>
+                            <button
+                              className="footer-delete-button"
+                              onClick={(e) => {
+                                setEditId(user.id);
+                                setEditShow(true);
+                              }}
+                            >
+                              - Edytuj Użytkownika
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </>
             )}
           </form>
           {message ? (

@@ -11,6 +11,7 @@ export default function EditMenu(props) {
     type: "",
     which: "",
     category: "",
+    path: "",
     id: null,
   });
   const [menuLvl1, setMenuLvl1] = useState([]);
@@ -28,10 +29,7 @@ export default function EditMenu(props) {
   async function getCategory() {
     let ifExist = false;
     axios.get(`${url}/getcategory/${data.which}`).then((res) => {
-      // console.log(res);
       res.data.category.forEach((menuEl) => {
-        // console.log(menuEl);
-        // console.log(data);
         if (
           menuEl.path.split("/")[3].toLowerCase().replace(/ /g, "") ==
           data.category
@@ -40,7 +38,7 @@ export default function EditMenu(props) {
         }
       });
       if (!ifExist) {
-        data.category = "";
+        setData({ ...data, category: "" });
       }
       setCategory(res.data.category);
       setLoadingCategory(false);
@@ -55,6 +53,7 @@ export default function EditMenu(props) {
         id: props.id,
         which: res.data.data[0].glowny,
         type: res.data.data[0].rodzaj,
+        path: res.data.data[0].path,
         category: res.data.data[0].path.split("/")[3],
       });
       setLoading(false);
@@ -79,8 +78,6 @@ export default function EditMenu(props) {
   const editMenuFunction = async (e) => {
     e.preventDefault();
 
-    console.log(data);
-
     axios
       .post(`${url}/editmenu/${props.id}`, data, {
         headers: {
@@ -92,7 +89,6 @@ export default function EditMenu(props) {
           setMsg(res.data.error);
         } else {
           // setMsg(res.data.msg);
-          console.log(res.data);
           props.setEditShow(false);
         }
       });
@@ -118,6 +114,14 @@ export default function EditMenu(props) {
             setData({ ...data, name: e.target.value });
           }}
           defaultValue={data.name}
+        />
+        <h3>Link do zewnętrznej strony:</h3>
+        <input
+          type="text"
+          onChange={(e) => {
+            setData({ ...data, path: e.target.value });
+          }}
+          defaultValue={data.path.includes("http") ? data.path : null}
         />
         <h3>Czy jest to kategoria</h3>
         <input
@@ -190,6 +194,7 @@ export default function EditMenu(props) {
             init={{
               language: "pl",
               language_url: "/langs/pl.js",
+              plugins: "table link image preview code",
               resize: false,
               branding: false,
 

@@ -19,7 +19,6 @@ const Login = () => {
     axios
       .post(`${url}/logowanie`, { login: login, password: password })
       .then((response) => {
-        console.log(response);
         if (response.data.auth === false) {
           sessionStorage.setItem("isLogged", "flase");
           setErrorBox(<p className="login-error">{response.data.errors}</p>);

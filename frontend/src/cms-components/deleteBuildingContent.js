@@ -1,11 +1,13 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { url } from "../App";
 import EditBuildingContent from "./editBuildingContent";
+import LoginContext from "../context/LoginContext";
 
 export default function DeleteBuildingContent() {
   const location = useLocation();
+  const context = useContext(LoginContext);
   const [data, setData] = useState([]);
   const [buildingsList, setBuildingsList] = useState([]);
   const [actualBuilding, setActualBuilding] = useState("");
@@ -41,7 +43,7 @@ export default function DeleteBuildingContent() {
   async function fetchBuildings() {
     axios.get(`${url}/getallbuildings`).then((res) => {
       setBuildingsList(res.data.buildings);
-      setActualBuilding(res.data.buildings[0].which);
+      // setActualBuilding(res.data.buildings[0].which);
       setLoadingBuilding(false);
     });
   }
@@ -84,12 +86,21 @@ export default function DeleteBuildingContent() {
                   setActualBuilding(e.target.value);
                 }}
               >
+                <option value={""}>Wybierz budynek</option>
                 {buildingsList.map((building, key) => {
-                  return (
-                    <option key={key} value={building.which}>
-                      {building.name}
-                    </option>
-                  );
+                  if (
+                    context.state.userStatus.includes(
+                      `${building.which}kafle`
+                    ) ||
+                    context.state.userStatus.includes("kafleall") ||
+                    context.state.userStatus.includes("admin")
+                  ) {
+                    return (
+                      <option key={key} value={building.which}>
+                        {building.name}
+                      </option>
+                    );
+                  }
                 })}
               </select>
             )}

@@ -1,6 +1,6 @@
 import { Navigate, useNavigate } from "react-router-dom";
 import setTitle from "../functions/set-title";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import AddNews from "../cms-components/addNews";
 import AddUser from "../cms-components/addUser";
 import AddMenuLvl1 from "../cms-components/addMenuLvl1";
@@ -17,6 +17,11 @@ import EditContact from "../cms-components/editContact";
 import AddNewContact from "../cms-components/addNewContact";
 import LoginContext from "../context/LoginContext";
 import SetSequenceContentInBuilding from "../cms-components/setSequenceContentInBuilding";
+import MainPageCMS from "../cms-components/mainPage";
+import axios from "axios";
+import { url } from "../App";
+import SetSequenceMenuColorlvl1 from "../cms-components/setSequenceMenuColorlvl1";
+import SetSequenceMenuColor from "../cms-components/setSequenceMenuColor";
 
 const AdminPanel = () => {
   setTitle("Panel Administracyjny");
@@ -32,7 +37,7 @@ const AdminPanel = () => {
     window.location.reload();
   };
 
-  const [selectedPanel, setSelectedPanel] = useState(<AddNews />);
+  const [selectedPanel, setSelectedPanel] = useState(<MainPageCMS />);
 
   const panels = [
     <AddNews />,
@@ -43,10 +48,12 @@ const AdminPanel = () => {
     <DeleteMenu />,
     <AddFooter />,
     <AddBuildings />,
-    <SetSequenceContentInBuilding />,
     <AddBuildinContent />,
     <DeleteBuildingContent />,
     <SetSequenceInBuilding />,
+    <SetSequenceContentInBuilding />,
+    <SetSequenceMenuColorlvl1 />,
+    <SetSequenceMenuColor />,
     <SetArticleOnMain />,
     <AddNewContact />,
     <EditContact />,
@@ -54,7 +61,15 @@ const AdminPanel = () => {
 
   const swapPanel = (id) => {
     setSelectedPanel(panels[id]);
-    if (+id === 0 || +id === 9 || +id === 4 || +id === 1) {
+    if (
+      +id === 0 ||
+      +id === 9 ||
+      +id === 4 ||
+      +id === 1 ||
+      +id === 5 ||
+      +id === 10 ||
+      +id === 8
+    ) {
       ref.current.classList.remove("other-than-news");
     } else {
       ref.current.classList.add("other-than-news");
@@ -63,7 +78,9 @@ const AdminPanel = () => {
 
   const changeActive = (id) => {
     const prev = document.querySelector(".btn-active-cms");
-    prev.classList.remove("btn-active-cms");
+    if (prev) {
+      prev.classList.remove("btn-active-cms");
+    }
     document.getElementById(id).classList.add("btn-active-cms");
   };
 
@@ -90,7 +107,7 @@ const AdminPanel = () => {
                 ) {
                   return (
                     <button
-                      className="cms-nav-btn btn-active-cms"
+                      className="cms-nav-btn"
                       id="0"
                       onClick={(e) => {
                         swapPanel(e.target.id);
@@ -219,17 +236,6 @@ const AdminPanel = () => {
                       >
                         Dodaj/Usuń budynek w menu
                       </button>
-                      <button
-                        className="cms-nav-btn"
-                        id="8"
-                        onClick={(e) => {
-                          swapPanel(e.target.id);
-                          changeActive(e.target.id);
-                        }}
-                        disabled
-                      >
-                        Ustaw kolejność kafli w budynku (w trakcie tworzenia)
-                      </button>
                     </>
                   );
                 }
@@ -244,7 +250,7 @@ const AdminPanel = () => {
                     <>
                       <button
                         className="cms-nav-btn"
-                        id="9"
+                        id="8"
                         onClick={(e) => {
                           swapPanel(e.target.id);
                           changeActive(e.target.id);
@@ -254,13 +260,23 @@ const AdminPanel = () => {
                       </button>
                       <button
                         className="cms-nav-btn"
-                        id="10"
+                        id="9"
                         onClick={(e) => {
                           swapPanel(e.target.id);
                           changeActive(e.target.id);
                         }}
                       >
                         Usuń/Edytuj kafle w budynku
+                      </button>
+                      <button
+                        className="cms-nav-btn"
+                        id="11"
+                        onClick={(e) => {
+                          swapPanel(e.target.id);
+                          changeActive(e.target.id);
+                        }}
+                      >
+                        Edytuj kolejność kafli w budynku
                       </button>
                     </>
                   );
@@ -273,16 +289,39 @@ const AdminPanel = () => {
                   context.state.userStatus.includes("sequence")
                 ) {
                   return (
-                    <button
-                      className="cms-nav-btn"
-                      id="11"
-                      onClick={(e) => {
-                        swapPanel(e.target.id);
-                        changeActive(e.target.id);
-                      }}
-                    >
-                      Edytuj kolejność budynków
-                    </button>
+                    <>
+                      <button
+                        className="cms-nav-btn"
+                        id="10"
+                        onClick={(e) => {
+                          swapPanel(e.target.id);
+                          changeActive(e.target.id);
+                        }}
+                      >
+                        Edytuj kolejność budynków
+                      </button>
+
+                      <button
+                        className="cms-nav-btn"
+                        id="12"
+                        onClick={(e) => {
+                          swapPanel(e.target.id);
+                          changeActive(e.target.id);
+                        }}
+                      >
+                        Edytuj kolejność menu w poziomie 1
+                      </button>
+                      <button
+                        className="cms-nav-btn"
+                        id="13"
+                        onClick={(e) => {
+                          swapPanel(e.target.id);
+                          changeActive(e.target.id);
+                        }}
+                      >
+                        Edytuj kolejność w elementach menu
+                      </button>
+                    </>
                   );
                 }
               })()}
@@ -295,7 +334,7 @@ const AdminPanel = () => {
                   return (
                     <button
                       className="cms-nav-btn"
-                      id="12"
+                      id="14"
                       onClick={(e) => {
                         swapPanel(e.target.id);
                         changeActive(e.target.id);
@@ -316,7 +355,7 @@ const AdminPanel = () => {
                     <>
                       <button
                         className="cms-nav-btn"
-                        id="13"
+                        id="15"
                         onClick={(e) => {
                           swapPanel(e.target.id);
                           changeActive(e.target.id);
@@ -326,7 +365,7 @@ const AdminPanel = () => {
                       </button>
                       <button
                         className="cms-nav-btn"
-                        id="14"
+                        id="16"
                         onClick={(e) => {
                           swapPanel(e.target.id);
                           changeActive(e.target.id);

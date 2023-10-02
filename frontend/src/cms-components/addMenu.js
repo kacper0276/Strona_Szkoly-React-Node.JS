@@ -11,6 +11,7 @@ export default function AddMenu() {
     type: "",
     which: "",
     category: "",
+    path: "",
   });
   const [menuLvl1, setMenuLvl1] = useState([]);
   const [category, setCategory] = useState([]);
@@ -72,6 +73,13 @@ export default function AddMenu() {
             setData({ ...data, name: e.target.value });
           }}
         />
+        <h3>Link do zewnętrznej strony:</h3>
+        <input
+          type="text"
+          onChange={(e) => {
+            setData({ ...data, path: e.target.value });
+          }}
+        />
         <h3>Czy jest to kategoria</h3>
         <input
           type="checkbox"
@@ -125,8 +133,8 @@ export default function AddMenu() {
               language: "pl",
               language_url: "/langs/pl.js",
               resize: false,
+              plugins: "table link image preview code",
               branding: false,
-
               menu: {
                 file: {
                   title: "File",
@@ -147,6 +155,10 @@ export default function AddMenu() {
                   title: "Insert",
                   items:
                     "image link media addcomment pageembed template codesample inserttable | charmap emoticons hr | pagebreak nonbreaking anchor tableofcontents | insertdatetime",
+                },
+                toolbar: {
+                  title: "Link",
+                  items: "link",
                 },
                 format: {
                   title: "Format",

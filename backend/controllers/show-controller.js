@@ -28,13 +28,13 @@ class showController {
         else {
           buildings = result;
           connection.query(
-            "SELECT `nazwa`, `path`, `glowny` FROM `menu` WHERE `lvl`=1",
+            "SELECT `nazwa`, `path`, `glowny` FROM `menu` WHERE `lvl`=1 ORDER BY sequence ASC",
             (err, result) => {
               if (err) throw err;
               size = result.length;
               for (let i = 0; i < size; i++) {
                 connection.query(
-                  "SELECT nazwa, path, lvl AS type, id AS linkType FROM menu WHERE lvl < 3 AND glowny = ?",
+                  "SELECT nazwa, path, lvl AS type, id AS linkType FROM menu WHERE lvl < 3 AND glowny = ? ORDER BY type, sequence ASC",
                   [result[i].glowny],
                   (err, result) => {
                     if (result[0].type == 1) {
@@ -48,6 +48,7 @@ class showController {
                           : (result[j].linkType = "inside");
                       }
                     }
+                    // console.log(result);
                     navigation.push(result);
                     if (i == size - 1) {
                       connection.execute(
@@ -335,7 +336,7 @@ class showController {
 
   async showPaginateArticle(req, res) {
     const resultsPerPage = 8;
-    const building = req.params.building;
+    const building = req.params.building.trim();
     let sql,
       list = "",
       path = "",
@@ -343,7 +344,12 @@ class showController {
       paths = [],
       obj,
       title = building;
-    sql = `SELECT id, title, shortdes, longdes, img, alt, date, type, keyword FROM artykul WHERE id != 262 AND includes LIKE '%${building}%' ORDER BY date DESC`;
+
+    if (building == "szkołabranżowa") {
+      sql = `SELECT id, title, shortdes, longdes, img, alt, date, type, keyword FROM artykul WHERE id != 262 AND includes LIKE '%szkołabranżowa%' AND includes NOT LIKE '%szkołabranżowaii%' ORDER BY date DESC`;
+    } else {
+      sql = `SELECT id, title, shortdes, longdes, img, alt, date, type, keyword FROM artykul WHERE id != 262 AND includes LIKE '%${building}%' ORDER BY date DESC`;
+    }
 
     connection.query(
       "SELECT title AS name, includes AS path FROM artykul WHERE id = 262 ",
@@ -378,7 +384,12 @@ class showController {
             }
             const startingLimit = (page - 1) * resultsPerPage;
 
-            sql = `SELECT id, title, shortdes, longdes, img, alt, date, type, keyword FROM artykul WHERE id != 262 AND includes LIKE '%${building}%' ORDER BY date DESC LIMIT ${startingLimit},${resultsPerPage}`;
+            if (building == "szkołabranżowa") {
+              sql = `SELECT id, title, shortdes, longdes, img, alt, date, type, keyword FROM artykul WHERE id != 262 AND includes LIKE '%szkołabranżowa%' AND includes NOT LIKE '%szkołabranżowaii%' ORDER BY date DESC LIMIT ${startingLimit},${resultsPerPage}`;
+            } else {
+              // sql = `SELECT id, title, shortdes, longdes, img, alt, date, type, keyword FROM artykul WHERE id != 262 AND includes LIKE '%${building}%' ORDER BY date DESC`;
+              sql = `SELECT id, title, shortdes, longdes, img, alt, date, type, keyword FROM artykul WHERE id != 262 AND includes LIKE '%${building}%' ORDER BY date DESC LIMIT ${startingLimit},${resultsPerPage}`;
+            }
 
             connection.query(sql, (err, result) => {
               if (err) throw err;
@@ -468,7 +479,7 @@ class showController {
           (err, result) => {
             contact = result;
             connection.execute(
-              "SELECT name, which, content, type, link, img FROM buildings WHERE type != 'poziom1' AND which = ?",
+              "SELECT name, which, content, type, link, img FROM buildings WHERE type != 'poziom1' AND which = ? ORDER BY sequence ASC",
               [building],
               (err, result) => {
                 if (err) throw err;

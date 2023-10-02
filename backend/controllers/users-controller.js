@@ -152,18 +152,22 @@ class userControllers {
     let actualClassUser = "";
     let sql = "";
 
-    klasa.forEach((classUser) => {
-      actualClassUser += `${classUser.value}, `;
-    });
+    if (klasa.length != 0) {
+      klasa.forEach((classUser) => {
+        actualClassUser += `${classUser.value}, `;
+      });
 
-    actualClassUser = actualClassUser.slice(0, -2);
+      actualClassUser = actualClassUser.slice(0, -2);
+    }
 
     if (haslo && klasa.length != 0) {
-      sql = `UPDATE logowanie SET password='${hash}', klasa='${actualClassUser}', login='${login}'  WHERE id=${id}`;
+      sql = `UPDATE logowanie SET password='${hash}', klasa='${actualClassUser}', login='${login}' WHERE id=${id}`;
     } else if (haslo) {
-      sql = `UPDATE logowanie SET password='${hash}', login='${login}'  WHERE id=${id}`;
+      sql = `UPDATE logowanie SET password='${hash}', login='${login}' WHERE id=${id}`;
+    } else if (haslo == "" && klasa.length != 0) {
+      sql = `UPDATE logowanie SET login='${login}', klasa='${actualClassUser}' WHERE id=${id}`;
     } else {
-      sql = `UPDATE logowanie SET login='${login}'  WHERE id=${id}`;
+      sql = `UPDATE logowanie SET login='${login}' WHERE id=${id}`;
     }
 
     if (haslo == haslo2) {

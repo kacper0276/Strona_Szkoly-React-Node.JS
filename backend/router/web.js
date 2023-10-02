@@ -111,6 +111,13 @@ router.post(
 // Wszystkie artykuły
 router.get("/api/getarticle", cors(), articleController.showAllArticle);
 
+// Artykuły zależne od budynku
+router.get(
+  "/api/getarticlefrombuilding/:building",
+  cors(),
+  articleController.getArticleSelected
+);
+
 // Dodawanie stopki
 router.post(
   "/api/addfooter",
@@ -189,6 +196,13 @@ router.post(
   verifyJWT,
   cors(),
   buildingsController.setSequence
+);
+
+router.post(
+  "/api/setbuildingcontentsequence/:building",
+  verifyJWT,
+  cors(),
+  buildingsController.setBuildingContentSequence
 );
 
 // Pobieranie liczby artykułów na stronie głównej
@@ -386,6 +400,29 @@ router.post(
   uploadPhoto.array("images"),
   cors(),
   photoController.editImage
+);
+
+// Ustawianie kolejności menu lvl1
+router.post(
+  "/api/setsequencemenulvl1",
+  verifyJWT,
+  cors(),
+  menuColorController.setSequenceMenuLvl1
+);
+
+// Pobieranie kolejności w danym menu != lvl1
+router.get(
+  "/api/getdetailsmenu/:menu",
+  cors(),
+  menuColorController.getDetailsSequenceMenu
+);
+
+// Ustawianie kolejności menu content
+router.post(
+  "/api/setsequencemenucontent/:which",
+  verifyJWT,
+  cors(),
+  menuColorController.setSequenceMenu
 );
 
 router.get("*", cors(), (req, res) => {

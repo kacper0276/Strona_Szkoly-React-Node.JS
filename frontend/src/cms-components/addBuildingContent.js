@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { url } from "../App";
+import LoginContext from "../context/LoginContext";
 
 export default function AddBuildinContent() {
   const location = useLocation();
+  const context = useContext(LoginContext);
   const [buildingsList, setBuildingsList] = useState([]);
   const [iconsList, setIconsList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -93,11 +95,17 @@ export default function AddBuildinContent() {
             }}
           >
             {buildingsList.map((building, key) => {
-              return (
-                <option key={key} value={building.which}>
-                  {building.name}
-                </option>
-              );
+              if (
+                context.state.userStatus.includes(`${building.which}kafle`) ||
+                context.state.userStatus.includes("kafleall") ||
+                context.state.userStatus.includes("admin")
+              ) {
+                return (
+                  <option key={key} value={building.which}>
+                    {building.name}
+                  </option>
+                );
+              }
             })}
           </select>
         )}
@@ -124,6 +132,7 @@ export default function AddBuildinContent() {
           init={{
             language: "pl",
             language_url: "/langs/pl.js",
+            plugins: "table link image preview code",
             resize: false,
             branding: false,
 

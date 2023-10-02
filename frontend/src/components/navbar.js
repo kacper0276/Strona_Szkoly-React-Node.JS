@@ -205,7 +205,6 @@ const Navbar = () => {
                 {building.name}
               </a>
             );
-            console.log("chuj");
           } else {
             temp.push(
               <Link
@@ -242,16 +241,6 @@ const Navbar = () => {
           }
         });
         setMenu(temp);
-      });
-    fetch("https://v2.jokeapi.dev/joke/Dark?blacklistFlags=religious,explicit")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.type == "twopart") {
-          console.log(data.setup);
-          console.log(data.delivery);
-        } else {
-          console.log(data.joke);
-        }
       });
   }, []);
 

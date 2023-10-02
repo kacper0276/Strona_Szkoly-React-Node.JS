@@ -20,7 +20,7 @@ const News = (props) => {
           {props.img == "noimg.svg" ? (
             <img src={`/images/${props.img}`} className="no-img-news" />
           ) : (
-            <img src={`/news/${props.img}`} />
+            <img src={`/news/${props.img}`} alt={`${props.alt}`} />
           )}
         </div>
         <div className="news-item-text">

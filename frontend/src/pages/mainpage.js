@@ -30,6 +30,7 @@ const Mainpage = () => {
               short={element.shortdes}
               date={element.date}
               title={element.title}
+              alt={element.alt}
             />
           );
         });
@@ -61,7 +62,8 @@ const Mainpage = () => {
               <img src="./images/CKZIUWhiteOutline.svg" alt="logo" />
               <h1>
                 Centrum Kształcenia
-                <br /> Ustawicznego I Zawodowego <br />W Brodnicy
+                <br />
+                Zawodowego I Ustawicznego <br />W Brodnicy
               </h1>
             </div>
             <img src="./images/holder.png" alt="" />

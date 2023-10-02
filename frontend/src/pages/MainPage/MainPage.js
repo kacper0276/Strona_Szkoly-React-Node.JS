@@ -5,8 +5,8 @@ export default function MainPage() {
   return (
     <div className={`${styles.main_page}`}>
       <div className={`${styles.icon_menu}`}>
-        <Link
-          to={"https://www.youtube.com/c/CKaziuTV/videos"}
+        <a
+          href="https://www.youtube.com/c/CKaziuTV/videos"
           target="_blank"
           style={{
             color: "white",
@@ -25,7 +25,7 @@ export default function MainPage() {
             <path d="M9 6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM7 3a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" />
           </svg>
           <b>Filmy</b>
-        </Link>
+        </a>
       </div>
       <div className={`${styles.icon_menu}`}>
         <Link

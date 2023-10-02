@@ -26,8 +26,8 @@ class buildingsController {
           let includesActual = result[0].includes;
           titleActual += `, ${name}`;
           includesActual += `, ${name.toLowerCase().replace(/\s+/g, "")}`;
-          console.log(titleActual);
-          console.log(includesActual);
+          content = content.replaceAll('href="', 'href="/');
+
           connection.execute(
             "UPDATE artykul SET title=?, includes=? WHERE id = 262",
             [titleActual, includesActual],
@@ -57,6 +57,10 @@ class buildingsController {
         }
       );
     } else if (type == "download") {
+      // content = content.replaceAll('href="', 'href="/');
+      content = content.replaceAll('href="', 'href="/');
+      content = content.replaceAll('href="/http', 'href="http');
+      content = content.replaceAll('src="', 'src="/');
       connection.execute(
         "INSERT INTO `buildings` (`name`, `type`, `color`, `backgroundImg`, `which`, `content`, `link`, `img`, `sequence`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
         [name, type, color, backgroundImg, which, content, link, img, 10],
@@ -75,6 +79,10 @@ class buildingsController {
             if (err) throw err;
 
             link = `/aktualnosci/${result[0].which}/1`;
+            // content = content.replaceAll('href="', 'href="/');
+            content = content.replaceAll('href="', 'href="/');
+            content = content.replaceAll('href="/http', 'href="http');
+            content = content.replaceAll('src="', 'src="/');
 
             connection.execute(
               "INSERT INTO `buildings` (`name`, `type`, `color`, `backgroundImg`, `which`, `content`, `link`, `img`, `sequence`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -96,9 +104,21 @@ class buildingsController {
             // console.log(which);
             // console.log(content);
 
-            link = `/content${result[0].link}/${name
-              .toLowerCase()
-              .replace(/\s+/g, "")}`;
+            link =
+              link != "BRAK"
+                ? link
+                : `/content${result[0].link}/${name
+                    .toLowerCase()
+                    .replace(/\s+/g, "")}`;
+            // content = content.replaceAll('href="content', 'href="/content');
+            // content = content.replaceAll('href="files', 'href="/files');
+            // content = content.replaceAll(
+            //   'href="aktualnosci',
+            //   'href="/aktualnosci'
+            // );
+            content = content.replaceAll('href="', 'href="/');
+            content = content.replaceAll('href="/http', 'href="http');
+            content = content.replaceAll('src="', 'src="/');
 
             connection.execute(
               "INSERT INTO `buildings` (`name`, `type`, `color`, `backgroundImg`, `which`, `content`, `link`, `img`, `sequence`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -204,8 +224,9 @@ class buildingsController {
           let includesActual = result[0].includes;
           titleActual += `, ${name}`;
           includesActual += `, ${name.toLowerCase().replace(/\s+/g, "")}`;
-          console.log(titleActual);
-          console.log(includesActual);
+          content = content.replaceAll('href="', 'href="/');
+          content = content.replaceAll('href="/http', 'href="http');
+          content = content.replaceAll('src="', 'src="/');
           connection.execute(
             "UPDATE artykul SET title=?, includes=? WHERE id = 262",
             [titleActual, includesActual],
@@ -236,6 +257,9 @@ class buildingsController {
         }
       );
     } else if (type == "download") {
+      content = content.replaceAll('href="', 'href="/');
+      content = content.replaceAll('href="/http', 'src="http');
+      content = content.replaceAll('src="', 'src="/');
       connection.execute(
         "UPDATE `buildings` SET `name`=?, `type`=?, `color`=?, `backgroundImg`=?, `which`=?, `content`=?, `link`=?, `img`=?, `sequence`=? WHERE id=?",
         [name, type, color, backgroundImg, which, content, link, img, 10, id],
@@ -252,6 +276,9 @@ class buildingsController {
           (err, result) => {
             if (err) throw err;
             link = `/aktualnosci/${result[0].which}/1`;
+            content = content.replaceAll('href="', 'href="/');
+            content = content.replaceAll('href="/http', 'href="http');
+            content = content.replaceAll('src="', 'src="/');
             connection.execute(
               "UPDATE `buildings` SET `name`=?, `type`=?, `color`=?, `backgroundImg`=?, `which`=?, `content`=?, `link`=?, `img`=?, `sequence`=? WHERE id=?",
               [
@@ -281,9 +308,22 @@ class buildingsController {
             if (err) throw err;
             // console.log(which);
             // console.log(content);
-            link = `/content${result[0].link}/${name
-              .toLowerCase()
-              .replace(/\s+/g, "")}`;
+            link =
+              link != "BRAK"
+                ? link
+                : `/content${result[0].link}/${name
+                    .toLowerCase()
+                    .replace(/\s+/g, "")}`;
+            // content = content.replaceAll('href="content', 'href="/content');
+            // content = content.replaceAll('href="files', 'href="/files');
+            // content = content.replaceAll(
+            //   'href="aktualnosci',
+            //   'href="/aktualnosci'
+            // );
+            content = content.replaceAll('href="', 'href="/');
+            content = content.replaceAll('href="/http', 'href="http');
+            content = content.replaceAll('src="', 'src="/');
+
             connection.execute(
               "UPDATE `buildings` SET `name`=?, `type`=?, `color`=?, `backgroundImg`=?, `which`=?, `content`=?, `link`=?, `img`=?, `sequence`=? WHERE id=?",
               [
@@ -330,7 +370,7 @@ class buildingsController {
 
   async showSequenceBuildings(req, res) {
     connection.query(
-      "SELECT name, link FROM buildings WHERE type = 'poziom1' AND name != 'Wszystkie' ORDER BY sequence ASC",
+      "SELECT name, which FROM buildings WHERE type = 'poziom1' AND name != 'Wszystkie' ORDER BY sequence ASC",
       (err, result) => {
         if (err) throw err;
 
@@ -373,13 +413,6 @@ class buildingsController {
   async getDetailsBuilding(req, res) {
     let nameBuilding = req.params.namebuilding.toLowerCase().replace(/ /g, "");
 
-    if (
-      nameBuilding == "szkołabranżowai" ||
-      nameBuilding == "szkołabranżowaii"
-    ) {
-      nameBuilding = "szkołabranżowa";
-    }
-
     connection.query(
       "SELECT * FROM buildings WHERE type != 'poziom1' AND which = ?",
       [nameBuilding],
@@ -413,6 +446,39 @@ class buildingsController {
       [id],
       (err, result) => {
         res.send({ data: result });
+      }
+    );
+  }
+
+  async setBuildingContentSequence(req, res) {
+    const building = req.params.building;
+    const sequence = req.body.sequence;
+    let pom = 1;
+
+    connection.query(
+      "SELECT name FROM buildings WHERE type!='poziom1' AND name!='wszystkie' and which = ?",
+      [building],
+      (err, result) => {
+        if (err) throw err;
+        // const len = result.length;
+
+        if (result.length != sequence.length) {
+          res.send({ msg: "Nie wybrano wszystkich opcji" });
+        } else {
+          for (let i = 0; i < sequence.length; i++) {
+            connection.query(
+              "UPDATE buildings SET `sequence`=? WHERE name = ? AND type!='poziom1' AND which=?",
+              [pom, sequence[i].value, building],
+              (err, result) => {
+                if (err) throw err;
+              }
+            );
+            pom++;
+            if (pom == sequence.length) {
+              res.send({ msg: "Zmieniono kolejność" });
+            }
+          }
+        }
       }
     );
   }

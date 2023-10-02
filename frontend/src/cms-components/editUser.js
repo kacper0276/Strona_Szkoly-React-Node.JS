@@ -6,18 +6,15 @@ import { useLocation } from "react-router-dom";
 
 export default function EditUser(props) {
   const location = useLocation();
-  const clasesUser = [
+  const [loadingClass, setLoadingClass] = useState(true);
+  const [clasesUser, setClasesUser] = useState([
     {
       value: "admin",
       label: "admin",
     },
     {
-      value: "addNews",
-      label: "Dodawanie aktualności",
-    },
-    {
       value: "news",
-      label: "Aktualności (dodawanie edycja usuwanie)",
+      label: "Aktualności",
     },
     {
       value: "menu",
@@ -51,7 +48,46 @@ export default function EditUser(props) {
       value: "galeria",
       label: "Galeria",
     },
-  ];
+    {
+      value: "newssport",
+      label: "Sport - Aktualności",
+    },
+    {
+      value: "newsmain",
+      label: "Główna - Aktualności",
+    },
+  ]);
+
+  const customStyles = {
+    menu: (css) => ({
+      ...css,
+      width: "500px",
+    }),
+    control: (css) => ({ ...css, display: "inline-flex " }),
+    valueContainer: (css) => ({
+      ...css,
+    }),
+  };
+
+  async function fetchBuildings() {
+    axios.get(`${url}/getallbuildings`).then((res) => {
+      res.data.buildings.forEach((building) => {
+        const obj = {
+          value: `${building.name.toLowerCase().replace(/\s+/g, "")}news`,
+          label: `${building.name} - Aktualności`,
+        };
+        const obj1 = {
+          value: `${building.name.toLowerCase().replace(/\s+/g, "")}kafle`,
+          label: `${building.name} - Kafle`,
+        };
+        let arr = clasesUser;
+        arr.push(obj);
+        arr.push(obj1);
+        setClasesUser(arr);
+      });
+      setLoadingClass(false);
+    });
+  }
   const [newSequence, setNewSequence] = useState("");
   const [message, setMessage] = useState("");
   const [loadingActualData, setLoadingActualData] = useState(true);
@@ -70,12 +106,8 @@ export default function EditUser(props) {
     const userName = document.querySelector("#usrName").value;
     const classUser = newSequence;
 
-    console.log(classUser);
-
     if (pass1 !== pass2) {
       setMessage("Hasła nie są takie same.");
-    } else if (pass1 == "" || pass2 == "" || userName == "") {
-      setMessage("Żadne z pól nie może być puste.");
     } else {
       axios
         .post(
@@ -122,6 +154,10 @@ export default function EditUser(props) {
     fetchActualData();
   }, [location]);
 
+  useEffect(() => {
+    fetchBuildings();
+  }, []);
+
   return (
     <div className="add-news-panel">
       <button
@@ -153,7 +189,16 @@ export default function EditUser(props) {
             <h3>Potwierdź hasło:</h3>
             <input type={"password"} id="secPass" />
             <h3>Klasa użytkownika:</h3>
-            <Select isMulti options={clasesUser} onChange={handleChange} />
+            {loadingClass ? (
+              <p>Ładowanie danych</p>
+            ) : (
+              <Select
+                isMulti
+                options={clasesUser}
+                onChange={handleChange}
+                styles={customStyles}
+              />
+            )}
             <input type={"submit"} value={"+ Edytuj użytkownika"} />
           </>
         )}

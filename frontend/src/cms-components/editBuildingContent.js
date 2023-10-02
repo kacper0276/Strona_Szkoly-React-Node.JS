@@ -1,12 +1,14 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { url } from "../App";
 import { Editor } from "@tinymce/tinymce-react";
+import LoginContext from "../context/LoginContext";
 
 export default function EditBuildingContent(props) {
   const location = useLocation();
   const [buildingsList, setBuildingsList] = useState([]);
+  const context = useContext(LoginContext);
   const [iconsList, setIconsList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({
@@ -130,15 +132,21 @@ export default function EditBuildingContent(props) {
             }}
           >
             {buildingsList.map((building, key) => {
-              return building.which == data.which ? (
-                <option key={key} value={building.which} selected>
-                  {building.name}
-                </option>
-              ) : (
-                <option key={key} value={building.which}>
-                  {building.name}
-                </option>
-              );
+              if (
+                context.state.userStatus.includes(`${building.which}kafle`) ||
+                context.state.userStatus.includes("kafleall") ||
+                context.state.userStatus.includes("admin")
+              ) {
+                return building.which == data.which ? (
+                  <option key={key} value={building.which} selected>
+                    {building.name}
+                  </option>
+                ) : (
+                  <option key={key} value={building.which}>
+                    {building.name}
+                  </option>
+                );
+              }
             })}
           </select>
         )}
@@ -169,6 +177,7 @@ export default function EditBuildingContent(props) {
           init={{
             language: "pl",
             language_url: "/langs/pl.js",
+            plugins: "table link image preview code",
             resize: false,
             branding: false,
 

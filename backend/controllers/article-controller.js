@@ -7,7 +7,7 @@ const imageSize = require("image-size");
 class articleController {
   async sendBuildings(req, res) {
     connection.query(
-      "SELECT name FROM `buildings` WHERE type='poziom1' ",
+      "SELECT name, which FROM `buildings` WHERE type='poziom1' ",
       (err, result) => {
         if (err) throw err;
 
@@ -19,14 +19,14 @@ class articleController {
   async addArticle(req, res) {
     const alt = req.body.alt,
       title = req.body.title,
-      shortDes = req.body.short,
-      longDes = req.body.long,
       date = req.body.date,
       type = "jedenimg";
 
     let name = req.body.buildings,
+      shortDes = req.body.short,
       where = "",
       keyword = req.body.keyword,
+      longDes = req.body.long,
       photos = [];
 
     keyword = keyword.trim().toLowerCase();
@@ -61,11 +61,22 @@ class articleController {
         }
       }
 
-      if (
-        buildings.includes("Szkoła branżowa I") ||
-        buildings.includes("Szkoła branżowa II")
-      ) {
+      // if (
+      //   buildings.includes("Szkoła branżowa I") ||
+      //   buildings.includes("Szkoła branżowa II")
+      // ) {
+      //   where += "szkołabranżowa, ";
+      // }
+
+      longDes = longDes.replaceAll("background: white;", "");
+      shortDes = shortDes.replaceAll("background: white;", "");
+
+      if (buildings.includes("Szkoła branżowa I")) {
         where += "szkołabranżowa, ";
+      }
+
+      if (buildings.includes("Szkoła branżowa II")) {
+        where += "szkołabranżowaii, ";
       }
 
       for (let i = 0; i < buildings.length; i++) {
@@ -89,6 +100,16 @@ class articleController {
       if (req.files.length == 0) {
         photosToString = "noimg.svg";
       }
+
+      // longDes = longDes.replaceAll('href="content', 'href="/content');
+      // longDes = longDes.replaceAll('href="files', 'href="/files');
+      // longDes = longDes.replaceAll('href="aktualnosci', 'href="/aktualnosci');
+      longDes = longDes.replaceAll('href="', 'href="/');
+      longDes = longDes.replaceAll('href="/http', 'href="http');
+      longDes = longDes.replaceAll('src="', 'src="/');
+      shortDes = shortDes.replaceAll('href="', 'href="/');
+      shortDes = shortDes.replaceAll('href="/http', 'href="http');
+      shortDes = shortDes.replaceAll('src="', 'src="/');
 
       connection.execute(
         "INSERT INTO `artykul`(`title`, `shortdes`, `longdes`, `includes`, `alt`, `date`, `img`,`type`, `keyword`, `img1`, `img2`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -143,24 +164,11 @@ class articleController {
   }
 
   async showAllArticle(req, res) {
-    connection.query("SELECT * FROM artykul WHERE id != 262", (err, result) => {
-      if (err) {
-        throw err;
-      }
-
-      res.send({ data: result });
-    });
-  }
-
-  async showEditForm(req, res) {
-    const id = req.params.id;
-
     connection.query(
-      "SELECT * FROM `artykul` WHERE id = ?",
-      [id],
+      "SELECT * FROM artykul WHERE id != 262 ORDER BY date DESC",
       (err, result) => {
         if (err) {
-          res.send({ err: err });
+          throw err;
         }
 
         res.send({ data: result });
@@ -173,18 +181,16 @@ class articleController {
       type = "jedenimg",
       alt = req.body.alt,
       title = req.body.title,
-      shortDes = req.body.short,
-      longDes = req.body.long,
       date = req.body.date;
 
     let name = req.body.buildings,
+      longDes = req.body.long,
       where = "",
       keyword = req.body.keyword,
+      shortDes = req.body.short,
       photos = [];
 
     keyword.trim().toLowerCase();
-
-    console.log(name);
 
     const buildings = name.split(",");
 
@@ -236,24 +242,35 @@ class articleController {
           }
         }
 
-        if (
-          buildings.includes("Szkoła branżowa I") ||
-          buildings.includes("Szkoła branżowa I")
-        ) {
+        longDes = longDes.replaceAll("background: white;", "");
+        shortDes = shortDes.replaceAll("background: white;", "");
+
+        // if (
+        //   buildings.includes("Szkoła branżowa I") ||
+        //   buildings.includes("Szkoła branżowa I")
+        // ) {
+        //   where += "szkołabranżowa, ";
+        // }
+
+        if (buildings.includes("szkołabranżowa")) {
           where += "szkołabranżowa, ";
+        }
+
+        if (buildings.includes("szkołabranżowaii")) {
+          where += "szkołabranżowaii, ";
         }
 
         for (let i = 0; i < buildings.length; i++) {
           if (
             i != buildings.length - 1 &&
-            buildings[i].toLowerCase() != "szkoła branżowa i" &&
-            buildings[i].toLowerCase() != "szkoła branżowa ii"
+            buildings[i].toLowerCase() != "szkołabranżowa" &&
+            buildings[i].toLowerCase() != "szkołabranżowaii"
           ) {
             where += buildings[i].toLowerCase() + ", ";
           } else {
             if (
-              buildings[i].toLowerCase() != "szkoła branżowa i" &&
-              buildings[i].toLowerCase() != "szkoła branżowa ii"
+              buildings[i].toLowerCase() != "szkołabranżowa" &&
+              buildings[i].toLowerCase() != "szkołabranżowaii"
             )
               where += buildings[i].toLowerCase();
           }
@@ -261,13 +278,23 @@ class articleController {
 
         const photosToString = photos.join(" ");
 
+        // longDes = longDes.replaceAll('href="content', 'href="/content');
+        // longDes = longDes.replaceAll('href="files', 'href="/files');
+        // longDes = longDes.replaceAll('href="aktualnosci', 'href="/aktualnosci');
+        longDes = longDes.replaceAll('href="', 'href="/');
+        longDes = longDes.replaceAll('href="/http', 'href="http');
+        longDes = longDes.replaceAll('src="', 'src="/');
+        shortDes = shortDes.replaceAll('href="', 'href="/');
+        shortDes = shortDes.replaceAll('href="/http', 'href="http');
+        shortDes = shortDes.replaceAll('src="', 'src="/');
+
         connection.execute(
           "UPDATE `artykul` SET `title`= ?,`shortdes`= ?,`longdes`= ?, `includes` = ?, `alt`= ?, `img`=?,  `date`= ?,`type`= ?, `keyword` = ? WHERE id = ?",
           [
             title,
             shortDes,
             longDes,
-            where,
+            where.trim(),
             alt,
             photosToString,
             date,
@@ -281,25 +308,25 @@ class articleController {
         );
       }
     } else {
-      if (
-        buildings.includes("Szkoła branżowa I") ||
-        buildings.includes("Szkoła branżowa II")
-      ) {
+      if (buildings.includes("szkołabranżowa")) {
         where += "szkołabranżowa, ";
+      }
+
+      if (buildings.includes("szkołabranżowaii")) {
+        where += "szkołabranżowaii, ";
       }
 
       for (let i = 0; i < buildings.length; i++) {
         if (
           i != buildings.length - 1 &&
-          buildings[i].toLowerCase() != "szkoła branżowa i" &&
-          buildings[i].toLowerCase() != "szkoła branżowa ii"
+          buildings[i].toLowerCase() != "szkołabranżowa" &&
+          buildings[i].toLowerCase() != "szkołabranżowaii"
         ) {
-          console.log(buildings[i].toLowerCase());
           where += buildings[i].toLowerCase() + ", ";
         } else {
           if (
-            buildings[i].toLowerCase() != "szkoła branżowa i" &&
-            buildings[i].toLowerCase() != "szkoła branżowa ii"
+            buildings[i].toLowerCase() != "szkołabranżowa" &&
+            buildings[i].toLowerCase() != "szkołabranżowaii"
           ) {
             where += buildings[i].toLowerCase();
           }
@@ -308,7 +335,7 @@ class articleController {
 
       connection.execute(
         "UPDATE `artykul` SET `title`= ?,`shortdes`= ?,`longdes`= ?, `includes` = ?, `alt`= ?,`date`= ?,`type`= ?, `keyword` = ? WHERE id = ?",
-        [title, shortDes, longDes, where, alt, date, type, keyword, id],
+        [title, shortDes, longDes, where.trim(), alt, date, type, keyword, id],
         (err, result) => {
           if (err) throw err;
 
@@ -349,11 +376,28 @@ class articleController {
       (err, result) => {
         if (err) throw err;
 
-        console.log(result[0].includes);
-
         res.send({ actualData: result });
       }
     );
+  }
+
+  async getArticleSelected(req, res) {
+    const building = req.params.building;
+    let sql = "";
+
+    if (building == "szkołabranżowa") {
+      sql = `SELECT * FROM artykul WHERE id != 262 AND includes LIKE '%szkołabranżowa%' AND includes NOT LIKE '%szkołabranżowaii%' ORDER BY date DESC`;
+    } else {
+      sql = `SELECT * FROM artykul WHERE id != 262 AND includes LIKE '%${building}%' ORDER BY date DESC`;
+    }
+
+    connection.query(sql, (err, result) => {
+      if (err) {
+        throw err;
+      }
+
+      res.send({ data: result });
+    });
   }
 }
 

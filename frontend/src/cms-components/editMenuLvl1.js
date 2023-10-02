@@ -95,6 +95,7 @@ export default function EditMenuLvl1(props) {
               init={{
                 language: "pl",
                 language_url: "/langs/pl.js",
+                plugins: "table link image preview code",
                 resize: false,
                 branding: false,
 

@@ -1,4 +1,5 @@
 const connection = require("../helpers/databaseConnection.js");
+const removePolishChar = require("../helpers/deletePolishChar.js");
 
 class menuColorController {
   async addColorMenu(req, res) {
@@ -13,16 +14,21 @@ class menuColorController {
 
     if (type == "poziom1") {
       path == ""
-        ? (path = "/content/" + name.toLowerCase().replace(/ /g, ""))
+        ? (path =
+            "/content/" +
+            removePolishChar(name.toLowerCase().replace(/ /g, "")))
         : (path = path);
       lvl = 1;
-      main = name.toLowerCase().replace(/ /g, "");
+      main = removePolishChar(name.toLowerCase().replace(/ /g, ""));
 
       if (rodzaj != "") {
-        type = rodzaj;
-        path = `/content/${name.toLowerCase().replace(/ /g, "")}/${name
-          .toLowerCase()
-          .replace(/ /g, "")}`;
+        type = rodzaj.replaceAll('href="', 'href="/');
+        type = type.replaceAll('href="/http', 'href="http');
+        type = type.replaceAll('src="', 'src="/');
+        type = type.replaceAll("background: white;", "");
+        path = `/content/${removePolishChar(
+          name.toLowerCase().replace(/ /g, "")
+        )}/${removePolishChar(name.toLowerCase().replace(/ /g, ""))}`;
       } else {
         type = type;
       }
@@ -44,9 +50,16 @@ class menuColorController {
           [which],
           (err, result) => {
             path = result[0].path + "/";
-            path += name.toLowerCase().replace(/ /g, "");
+            path += removePolishChar(name.toLowerCase().replace(/ /g, ""));
             lvl = result[0].lvl + 1;
             main = result[0].glowny;
+            // type = type.replaceAll('href="content', 'href="/content');
+            // type = type.replaceAll('href="files', 'href="/files');
+            // type = type.replaceAll('href="aktualnosci', 'href="/aktualnosci');
+            type = type.replaceAll('href="', 'href="/');
+            type = type.replaceAll('href="/http', 'href="http');
+            type = type.replaceAll('src="', 'src="/');
+            type = type.replaceAll("background: white;", "");
 
             connection.execute(
               "INSERT INTO `menu`( `nazwa`, `path`, `rodzaj`, `lvl`, `glowny`, `sequence`) VALUES (?, ?, ?, ?, ?, ?)",
@@ -65,10 +78,22 @@ class menuColorController {
         connection.query(
           `SELECT path, lvl, glowny FROM menu WHERE path LIKE '%${category}%' AND rodzaj = 'kategoria'`,
           (err, result) => {
-            path = result[0].path + "/";
-            path += name.toLowerCase().replace(/ /g, "");
+            // path = result[0].path + "/";
+            // path += removePolishChar(name.toLowerCase().replace(/ /g, ""));
             lvl = result[0].lvl + 1;
             main = result[0].glowny;
+
+            path == ""
+              ? (path =
+                  result[0].path +
+                  "/" +
+                  removePolishChar(name.toLowerCase().replace(/ /g, "")))
+              : (path = path);
+
+            type = type.replaceAll('href="', 'href="/');
+            type = type.replaceAll('href="/http', 'href="http');
+            type = type.replaceAll('src="', 'src="/');
+            type = type.replaceAll("background: white;", "");
 
             connection.execute(
               "INSERT INTO `menu`( `nazwa`, `path`, `rodzaj`, `lvl`, `glowny`, `sequence`) VALUES (?, ?, ?, ?, ?, ?)",
@@ -89,10 +114,20 @@ class menuColorController {
           "SELECT path, lvl, glowny FROM menu WHERE glowny = ?",
           [which],
           (err, result) => {
-            path = result[0].path + "/";
-            path += name.toLowerCase().replace(/ /g, "");
+            path == ""
+              ? (path =
+                  result[0].path +
+                  "/" +
+                  removePolishChar(name.toLowerCase().replace(/ /g, "")))
+              : (path = path);
+            // path = result[0].path + "/";
+            // path += removePolishChar(name.toLowerCase().replace(/ /g, ""));
             lvl = result[0].lvl + 1;
             main = result[0].glowny;
+            type = type.replaceAll('href="', 'href="/');
+            type = type.replaceAll('href="/http', 'href="http');
+            type = type.replaceAll('src="', 'src="/');
+            type = type.replaceAll("background: white;", "");
 
             connection.execute(
               "INSERT INTO `menu`( `nazwa`, `path`, `rodzaj`, `lvl`, `glowny`, `sequence`) VALUES (?, ?, ?, ?, ?, ?)",
@@ -111,11 +146,25 @@ class menuColorController {
         connection.query(
           `SELECT path, lvl, glowny FROM menu WHERE path LIKE '%${category}%' AND rodzaj = 'kategoria'`,
           (err, result) => {
-            path = result[0].path + "/";
-            path += name.toLowerCase().replace(/ /g, "");
+            path == ""
+              ? (path =
+                  result[0].path +
+                  "/" +
+                  removePolishChar(name.toLowerCase().replace(/ /g, "")))
+              : (path = path);
+
+            // path = result[0].path + "/";
+            // path += removePolishChar(name.toLowerCase().replace(/ /g, ""));
+
             lvl = result[0].lvl + 1;
             main = result[0].glowny;
-
+            // type = type.replaceAll('href="content', 'href="/content');
+            // type = type.replaceAll('href="files', 'href="/files');
+            // type = type.replaceAll('href="aktualnosci', 'href="/aktualnosci');
+            type = type.replaceAll('href="', 'href="/');
+            type = type.replaceAll('href="/http', 'href="http');
+            type = type.replaceAll('src="', 'src="/');
+            type = type.replaceAll("background: white;", "");
             connection.execute(
               "INSERT INTO `menu`( `nazwa`, `path`, `rodzaj`, `lvl`, `glowny`, `sequence`) VALUES (?, ?, ?, ?, ?, ?)",
               [name, path, type, lvl, main, 15],
@@ -169,16 +218,22 @@ class menuColorController {
 
     if (type == "poziom1") {
       path == ""
-        ? (path = "/content/" + name.toLowerCase().replace(/ /g, ""))
+        ? (path =
+            "/content/" +
+            removePolishChar(name.toLowerCase().replace(/ /g, "")))
         : (path = path);
       lvl = 1;
-      main = name.toLowerCase().replace(/ /g, "");
+      main = removePolishChar(name.toLowerCase().replace(/ /g, ""));
 
       if (rodzaj != "") {
-        type = rodzaj;
-        path = `/content/${name.toLowerCase().replace(/ /g, "")}/${name
-          .toLowerCase()
-          .replace(/ /g, "")}`;
+        // type = rodzaj.replaceAll('href="', 'href="/');
+        type = rodzaj.replaceAll('href="', 'href="/');
+        type = type.replaceAll('href="/http', 'href="http');
+        type = type.replaceAll('src="', 'src="/');
+        type = type.replaceAll("background: white;", "");
+        path = `/content/${removePolishChar(
+          name.toLowerCase().replace(/ /g, "")
+        )}/${removePolishChar(name.toLowerCase().replace(/ /g, ""))}`;
       } else {
         type = type;
       }
@@ -200,9 +255,16 @@ class menuColorController {
           [which],
           (err, result) => {
             path = result[0].path + "/";
-            path += name.toLowerCase().replace(/ /g, "");
+            path += removePolishChar(name.toLowerCase().replace(/ /g, ""));
             lvl = result[0].lvl + 1;
             main = result[0].glowny;
+            // type = type.replaceAll('href="content', 'href="/content');
+            // type = type.replaceAll('href="files', 'href="/files');
+            // type = type.replaceAll('href="aktualnosci', 'href="/aktualnosci');
+            type = type.replaceAll('href="', 'href="/');
+            type = type.replaceAll('href="/http', 'href="http');
+            type = type.replaceAll('src="', 'src="/');
+            type = type.replaceAll("background: white;", "");
 
             connection.execute(
               "UPDATE `menu` SET `nazwa`= ?, `path`= ?, `rodzaj`= ?, `lvl`= ?, `glowny`= ? WHERE id = ?",
@@ -222,9 +284,16 @@ class menuColorController {
           `SELECT path, lvl, glowny FROM menu WHERE path LIKE '%${category}%' AND rodzaj = 'kategoria'`,
           (err, result) => {
             path = result[0].path + "/";
-            path += name.toLowerCase().replace(/ /g, "");
+            path += removePolishChar(name.toLowerCase().replace(/ /g, ""));
             lvl = result[0].lvl + 1;
             main = result[0].glowny;
+            // type = type.replaceAll('href="content', 'href="/content');
+            // type = type.replaceAll('href="files', 'href="/files');
+            // type = type.replaceAll('href="aktualnosci', 'href="/aktualnosci');
+            type = type.replaceAll('href="', 'href="/');
+            type = type.replaceAll('href="/http', 'href="http');
+            type = type.replaceAll('src="', 'src="/');
+            type = type.replaceAll("background: white;", "");
 
             connection.execute(
               "UPDATE `menu` SET `nazwa`= ?, `path`= ?, `rodzaj`= ?, `lvl`= ?, `glowny`= ? WHERE id = ?",
@@ -245,10 +314,21 @@ class menuColorController {
           "SELECT path, lvl, glowny FROM menu WHERE glowny = ?",
           [which],
           (err, result) => {
-            path = result[0].path + "/";
-            path += name.toLowerCase().replace(/ /g, "");
+            path == ""
+              ? (path =
+                  result[0].path +
+                  "/" +
+                  removePolishChar(name.toLowerCase().replace(/ /g, "")))
+              : (path = path);
+
+            // path = result[0].path + "/";
+            // path += removePolishChar(name.toLowerCase().replace(/ /g, ""));
             lvl = result[0].lvl + 1;
             main = result[0].glowny;
+            type = type.replaceAll('href="', 'href="/');
+            type = type.replaceAll('href="/http', 'href="http');
+            type = type.replaceAll('src="', 'src="/');
+            type = type.replaceAll("background: white;", "");
 
             connection.execute(
               "UPDATE `menu` SET `nazwa`= ?, `path`= ?, `rodzaj`= ?, `lvl`= ?, `glowny`= ? WHERE id = ?",
@@ -263,14 +343,24 @@ class menuColorController {
         );
       } else {
         which = which.toLowerCase().replace(/ /g, "");
-        category = category.toLowerCase().replace(/ /g, "");
+        category = removePolishChar(category.toLowerCase().replace(/ /g, ""));
         connection.query(
           `SELECT path, lvl, glowny FROM menu WHERE path LIKE '%${category}%' AND rodzaj = 'kategoria'`,
           (err, result) => {
-            path = result[0].path + "/";
-            path += name.toLowerCase().replace(/ /g, "");
+            path == ""
+              ? (path =
+                  result[0].path +
+                  "/" +
+                  removePolishChar(name.toLowerCase().replace(/ /g, "")))
+              : (path = path);
+            // path = result[0].path + "/";
+            // path += removePolishChar(name.toLowerCase().replace(/ /g, ""));
             lvl = result[0].lvl + 1;
             main = result[0].glowny;
+            type = type.replaceAll('href="', 'href="/');
+            type = type.replaceAll('href="/http', 'href="http');
+            type = type.replaceAll('src="', 'src="/');
+            type = type.replaceAll("background: white;", "");
 
             connection.execute(
               "UPDATE `menu` SET `nazwa`= ?, `path`= ?, `rodzaj`= ?, `lvl`= ?, `glowny`= ? WHERE id = ?",
@@ -289,7 +379,7 @@ class menuColorController {
 
   async getLvl1(req, res) {
     connection.query(
-      "SELECT * FROM menu WHERE rodzaj='poziom1' OR lvl=1",
+      "SELECT * FROM menu WHERE rodzaj='poziom1' OR lvl=1 ORDER BY sequence ASC",
       (err, result) => {
         if (err) throw err;
 
@@ -335,6 +425,83 @@ class menuColorController {
 
       res.send({ data: result });
     });
+  }
+
+  async setSequenceMenuLvl1(req, res) {
+    const sequence = req.body.sequence;
+    let pom = 1;
+
+    connection.query(
+      "SELECT * FROM `menu` WHERE lvl = 1 OR rodzaj='poziom1'",
+      (err, result) => {
+        if (err) throw err;
+
+        if (result.length != sequence.length) {
+          res.send({ msg: "Nie wybrano wszystkich opcji!" });
+        } else {
+          for (let i = 0; i < sequence.length; i++) {
+            connection.query(
+              "UPDATE menu SET `sequence`=? WHERE glowny = ? AND lvl = 1",
+              [pom, sequence[i].value],
+              (err, result) => {
+                if (err) throw err;
+              }
+            );
+
+            pom++;
+            if (pom == sequence.length) {
+              res.send({ msg: "Zmieniono kolejność" });
+            }
+          }
+        }
+      }
+    );
+  }
+
+  async getDetailsSequenceMenu(req, res) {
+    const which = req.params.menu;
+
+    connection.query(
+      "SELECT * FROM menu WHERE lvl = 2 AND glowny=? ORDER BY sequence ASC",
+      [which],
+      (err, result) => {
+        if (err) throw err;
+
+        res.send({ menu: result });
+      }
+    );
+  }
+
+  async setSequenceMenu(req, res) {
+    const which = req.params.which,
+      sequence = req.body.sequence;
+    let pom = 1;
+
+    connection.query(
+      "SELECT * FROM menu WHERE lvl=2 AND glowny=?",
+      [which],
+      (err, result) => {
+        if (err) throw err;
+
+        if (result.length != sequence.length) {
+          res.send({ msg: "Nie wybrano wszystkich opcji" });
+        } else {
+          for (let i = 0; i < sequence.length; i++) {
+            connection.query(
+              "UPDATE menu SET `sequence`=? WHERE nazwa = ? AND lvl=2 AND glowny=?",
+              [pom, sequence[i].value, which],
+              (err, result) => {
+                if (err) throw err;
+              }
+            );
+            pom++;
+            if (pom == sequence.length) {
+              res.send({ msg: "Zmieniono kolejność" });
+            }
+          }
+        }
+      }
+    );
   }
 }
 

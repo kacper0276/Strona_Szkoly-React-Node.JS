@@ -1,11 +1,13 @@
 import axios from "axios";
 import { url } from "../App";
 import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Select from "react-select";
+import LoginContext from "../context/LoginContext";
 
 export default function SetSequenceContentInBuilding() {
   const location = useLocation();
+  const context = useContext(LoginContext);
   const [buildingFromDB, setBuildingFromDB] = useState([]);
   const [buildingContentFromDB, setBuildingContentFromDB] = useState([]);
   const [building, setBuilding] = useState("");
@@ -16,7 +18,6 @@ export default function SetSequenceContentInBuilding() {
 
   async function fetchBuildings() {
     axios.get(`${url}/getbuildingsequence`).then((res) => {
-      console.log(res.data.data);
       setBuildingFromDB(res.data.data);
       setLoading(false);
     });
@@ -24,7 +25,6 @@ export default function SetSequenceContentInBuilding() {
 
   async function fetchBuildingContent() {
     axios.get(`${url}/getdetailsbuilding/${building}`).then((res) => {
-      console.log(res);
       let arr = [];
       for (let i = 0; i < res.data.buildings.length; i++) {
         const obj = {
@@ -45,24 +45,29 @@ export default function SetSequenceContentInBuilding() {
   async function setSequence(e) {
     e.preventDefault();
 
-    axios
-      .post(
-        `${url}/setbuildingsequence`,
-        { sequence: newSequence },
-        {
-          headers: {
-            accessToken: localStorage.getItem("token"),
-          },
-        }
-      )
-      .then((res) => {
-        if (res.data.error) {
-          setMessage(res.data.error);
-        } else {
-          setMessage(res.data.msg);
-        }
-        fetchBuildings();
-      });
+    if (buildingContentFromDB.length == newSequence.length) {
+      axios
+        .post(
+          `${url}/setbuildingcontentsequence/${building}`,
+          { sequence: newSequence },
+          {
+            headers: {
+              accessToken: localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.error) {
+            setMessage(res.data.error);
+          } else {
+            setMessage(res.data.msg);
+            setNewSequence([]);
+          }
+          fetchBuildings();
+        });
+    } else {
+      setMessage("Musisz wybrać wszystkie dane!");
+    }
   }
 
   useEffect(() => {
@@ -85,11 +90,17 @@ export default function SetSequenceContentInBuilding() {
           <select onChange={(e) => setBuilding(e.target.value)}>
             <option>Wybierz budynek</option>
             {buildingFromDB.map((building, key) => {
-              return (
-                <option value={building.name} key={key}>
-                  {building.name}
-                </option>
-              );
+              if (
+                context.state.userStatus.includes(`${building.which}kafle`) ||
+                context.state.userStatus.includes("kafleall") ||
+                context.state.userStatus.includes("admin")
+              ) {
+                return (
+                  <option key={key} value={building.which}>
+                    {building.name}
+                  </option>
+                );
+              }
             })}
           </select>
         )}
@@ -101,6 +112,7 @@ export default function SetSequenceContentInBuilding() {
               isMulti
               options={buildingContentFromDB}
               onChange={handleChange}
+              value={newSequence}
             />
           </>
         )}
