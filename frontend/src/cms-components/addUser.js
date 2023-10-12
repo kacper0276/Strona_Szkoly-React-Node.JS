@@ -78,7 +78,6 @@ const AddUser = () => {
 
   async function fetchBuildings() {
     axios.get(`${url}/getallbuildings`).then((res) => {
-      console.log(res.data.buildings);
       res.data.buildings.forEach((building) => {
         if (
           building.name.toLowerCase().replace(/\s+/g, "") == "szkołabranżowai"
@@ -112,9 +111,15 @@ const AddUser = () => {
   }
 
   async function fetchUsers() {
-    axios.get(`${url}/allusers`).then((res) => {
-      setUsersList(res.data.data);
-    });
+    axios
+      .get(`${url}/allusers`, {
+        headers: {
+          accessToken: localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        setUsersList(res.data.data);
+      });
     setLoadnig(false);
   }
 

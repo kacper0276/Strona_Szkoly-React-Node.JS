@@ -6,6 +6,9 @@ import DeleteInAdminPanel from "../DeleteInAdminPanel/DeleteInAdminPanel";
 import { url } from "../../App";
 import LoginContext from "../../context/LoginContext";
 import { Link, useNavigate } from "react-router-dom";
+import Resizer from "react-image-file-resizer";
+import { getImageSize } from "react-image-size";
+// import resizeImage from "../../functions/resizeImage";
 
 export default function AdminPanel() {
   useWebsiteTitle("CKZiU | Panel administratora");
@@ -29,6 +32,55 @@ export default function AdminPanel() {
     photos: [],
   });
   const [msg, setMsg] = useState("");
+
+  async function resizeImage(imageFile) {
+    let arr = [];
+
+    // console.log(imageFile.length);
+
+    // for (let i = 0; i < imageFile.length; i++) {
+    //   var _URL = window.URL || window.webkitURL;
+    //   const image = new Image();
+    //   var objectUrl = _URL.createObjectURL(imageFile[i]);
+    //   image.onload = function () {
+    //     console.log(this.width);
+    //     console.log(this.height);
+    //     var obj = { width: this.width, height: this.height };
+    //     console.log(obj);
+    //     _URL.revokeObjectURL(objectUrl);
+    //   };
+    // }
+
+    // for (let i = 0; i < imageFile.length; i++) {
+    //   const dimensions = getImageSize(imageFile[i]);
+    //   console.log(dimensions);
+
+    //   try {
+    //     Resizer.imageFileResizer(
+    //       imageFile,
+    //       height * 0.7,
+    //       width * 0.7,
+    //       "JPEG",
+    //       75,
+    //       0,
+    //       (newImg) => {
+    //         console.log(newImg);
+    //         arr.push(newImg);
+    //       },
+    //       "base64",
+    //       400,
+    //       500
+    //     );
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // }
+
+    setNewPhotosInAlbum({
+      ...newPhotosInAlbum,
+      photos: arr,
+    });
+  }
 
   async function getAllYears(type) {
     axios.get(`${url}/rokszkolny`).then((res) => {
@@ -132,14 +184,17 @@ export default function AdminPanel() {
     const data = new FormData();
     data.append("year", newPhotosInAlbum.schoolYear);
     data.append("album", newPhotosInAlbum.album);
+    resizeImage(newPhotosInAlbum.photos);
     for (const key of Object.keys(newPhotosInAlbum.photos)) {
       data.append("images", newPhotosInAlbum.photos[key]);
     }
 
+    console.log(data.images);
+
     axios.post(`${url}/dodajzdjecia`, data).then((res) => {
       setMsg(res.data.msg);
       setTimeout(() => {
-        window.location.reload();
+        // window.location.reload();
       }, 3000);
     });
   };
@@ -171,6 +226,7 @@ export default function AdminPanel() {
           <div className={`${styles.div_form}`}>
             <input
               type="file"
+              accept="image/*"
               className={`${styles.input_file}`}
               onChange={(e) => {
                 setNewSchoolYearData({
@@ -214,6 +270,7 @@ export default function AdminPanel() {
           <div className={`${styles.div_form}`}>
             <input
               type="file"
+              accept="image/*"
               className={`${styles.input_file}`}
               onChange={(e) => {
                 setNewAlbumData({ ...newAlbumData, photo: e.target.files[0] });
@@ -258,6 +315,7 @@ export default function AdminPanel() {
           <div className={`${styles.div_form}`}>
             <input
               type="file"
+              accept="image/*"
               className={`${styles.input_file}`}
               multiple
               onChange={(e) => {

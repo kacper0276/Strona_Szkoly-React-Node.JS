@@ -13,7 +13,7 @@ export default function EditUser(props) {
       label: "admin",
     },
     {
-      value: "news",
+      value: "newsall",
       label: "Aktualności",
     },
     {
@@ -29,7 +29,7 @@ export default function EditUser(props) {
       label: "Zarządzanie budynek",
     },
     {
-      value: "kafle",
+      value: "kafleall",
       label: "Kafle w budynku",
     },
     {
@@ -72,14 +72,28 @@ export default function EditUser(props) {
   async function fetchBuildings() {
     axios.get(`${url}/getallbuildings`).then((res) => {
       res.data.buildings.forEach((building) => {
-        const obj = {
-          value: `${building.name.toLowerCase().replace(/\s+/g, "")}news`,
-          label: `${building.name} - Aktualności`,
-        };
-        const obj1 = {
-          value: `${building.name.toLowerCase().replace(/\s+/g, "")}kafle`,
-          label: `${building.name} - Kafle`,
-        };
+        if (
+          building.name.toLowerCase().replace(/\s+/g, "") == "szkołabranżowai"
+        ) {
+          var obj = {
+            value: `szkołabranżowanews`,
+            label: `${building.name} - Aktualności`,
+          };
+          var obj1 = {
+            value: `szkołabranżowakafle`,
+            label: `${building.name} - Kafle`,
+          };
+        } else {
+          var obj = {
+            value: `${building.name.toLowerCase().replace(/\s+/g, "")}news`,
+            label: `${building.name} - Aktualności`,
+          };
+          var obj1 = {
+            value: `${building.name.toLowerCase().replace(/\s+/g, "")}kafle`,
+            label: `${building.name} - Kafle`,
+          };
+        }
+
         let arr = clasesUser;
         arr.push(obj);
         arr.push(obj1);

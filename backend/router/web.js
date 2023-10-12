@@ -51,7 +51,7 @@ router.post("/api/adduser", verifyJWT, cors(), usersController.register);
 router.post("/api/deluser/:id", verifyJWT, cors(), usersController.delete);
 
 // Lista użytkowników
-router.get("/api/allusers", cors(), usersController.showUsers);
+router.get("/api/allusers", verifyJWT, cors(), usersController.showUsers);
 
 // Edycja danych użytkownika
 router.post("/api/edituser/:id", verifyJWT, cors(), usersController.edit);

@@ -50,19 +50,25 @@
 
 .section_create_school_year {
   width: 33%;
-  height: 35vh;
+  height: 45vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   float: left;
 }
 
 .section_create_album {
   width: 33%;
-  height: 35vh;
+  height: 45vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   float: left;
 }
 
 .section_add_photo_to_album {
   width: 34%;
-  height: 35vh;
+  height: 45vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   float: left;
 }
 
@@ -183,6 +189,7 @@ select {
   .section_add_photo_to_album {
     width: 100vw;
     height: auto;
+    overflow: visible;
   }
 
   .button_style {
