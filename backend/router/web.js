@@ -331,6 +331,7 @@ router.get(
 // Rok szkolny
 router.post(
   "/api/stworzrokszkolny",
+  verifyJWT,
   uploadYear.array("image"),
   cors(),
   yearController.addYear
@@ -340,6 +341,7 @@ router.get("/api/rokszkolny", cors(), yearController.getAllYears);
 // Stwórz album
 router.post(
   "/api/stworzalbum",
+  verifyJWT,
   uploadAlbum.array("image"),
   cors(),
   albumController.addAlbum
@@ -349,6 +351,7 @@ router.get("/api/albumy/:rok", cors(), albumController.getAllAlbumsInYear);
 // Zdjęcia do albumu
 router.post(
   "/api/dodajzdjecia",
+  verifyJWT,
   uploadPhoto.array("images"),
   cors(),
   photoController.addPhotos
@@ -363,7 +366,12 @@ router.get(
 router.get("/api/getimgalbum/:id", cors(), yearController.getMiniImgToDelete);
 
 // Usuwanie rok szkolny zdjęcia
-router.post("/api/deleteyear/:id", cors(), yearController.deleteYear);
+router.post(
+  "/api/deleteyear/:id",
+  verifyJWT,
+  cors(),
+  yearController.deleteYear
+);
 
 // Pobieranie szczegółów albumu (przy usuwaniu)
 router.get(
@@ -373,14 +381,25 @@ router.get(
 );
 
 // Usuwanie albumu
-router.get("/api/deletealbum/:id", cors(), albumController.deleteAlbum);
+router.get(
+  "/api/deletealbum/:id",
+  verifyJWT,
+  cors(),
+  albumController.deleteAlbum
+);
 
 // Usuwanie zdjęć
-router.get("/api/deleteimg/:imgname", cors(), photoController.deleteImage);
+router.get(
+  "/api/deleteimg/:imgname",
+  verifyJWT,
+  cors(),
+  photoController.deleteImage
+);
 
 // Edycja zdjęć rok szkolny
 router.post(
   "/api/updateYear/:id",
+  verifyJWT,
   uploadYear.array("image"),
   cors(),
   yearController.updateYear
@@ -389,6 +408,7 @@ router.post(
 // Edycja albumów
 router.post(
   "/api/editalbum/:id",
+  verifyJWT,
   uploadAlbum.array("image"),
   cors(),
   albumController.editAlbum
@@ -397,6 +417,7 @@ router.post(
 // Edycja zdjęć w albumie
 router.post(
   "/api/editphotosinalbum",
+  verifyJWT,
   uploadPhoto.array("images"),
   cors(),
   photoController.editImage

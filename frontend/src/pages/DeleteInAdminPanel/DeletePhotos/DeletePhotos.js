@@ -76,12 +76,18 @@ export default function DeletePhotos() {
   }
 
   async function deleteImage() {
-    axios.get(`${url}/deleteimg/${actualPhoto}`).then((res) => {
-      console.log(res);
-      if (res.data.msg) {
-        window.location.reload();
-      }
-    });
+    axios
+      .get(`${url}/deleteimg/${actualPhoto}`, {
+        headers: {
+          accessToken: localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.data.msg) {
+          window.location.reload();
+        }
+      });
   }
 
   async function editImage(e) {
@@ -95,11 +101,17 @@ export default function DeletePhotos() {
       data.append("images", albumEditData.photos[key]);
     }
 
-    axios.post(`${url}/editphotosinalbum`, data).then((res) => {
-      if (res.data.msg) {
-        window.location.reload();
-      }
-    });
+    axios
+      .post(`${url}/editphotosinalbum`, data, {
+        headers: {
+          accessToken: localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        if (res.data.msg) {
+          window.location.reload();
+        }
+      });
   }
 
   useEffect(() => {

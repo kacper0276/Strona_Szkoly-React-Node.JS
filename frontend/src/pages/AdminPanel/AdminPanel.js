@@ -151,14 +151,20 @@ export default function AdminPanel() {
     data.append("name", newSchoolYearData.name);
     data.append("image", newSchoolYearData.photo);
 
-    axios.post(`${url}/stworzrokszkolny`, data).then((res) => {
-      getAllYears(0);
-      getAllYears(1);
-      setMsg(res.data.msg);
-      setTimeout(() => {
-        window.location.reload();
-      }, 3000);
-    });
+    axios
+      .post(`${url}/stworzrokszkolny`, data, {
+        headers: {
+          accessToken: localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        getAllYears(0);
+        getAllYears(1);
+        setMsg(res.data.msg);
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+      });
   };
 
   const addAlbum = async (e) => {
@@ -169,13 +175,19 @@ export default function AdminPanel() {
     data.append("year", newAlbumData.schoolYear);
     data.append("image", newAlbumData.photo);
 
-    axios.post(`${url}/stworzalbum`, data).then((res) => {
-      getAllYears();
-      setMsg(res.data.msg);
-      setTimeout(() => {
-        window.location.reload();
-      }, 3000);
-    });
+    axios
+      .post(`${url}/stworzalbum`, data, {
+        headers: {
+          accessToken: localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        getAllYears();
+        setMsg(res.data.msg);
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+      });
   };
 
   const addPhotos = async (e) => {
@@ -184,19 +196,24 @@ export default function AdminPanel() {
     const data = new FormData();
     data.append("year", newPhotosInAlbum.schoolYear);
     data.append("album", newPhotosInAlbum.album);
-    resizeImage(newPhotosInAlbum.photos);
+    // resizeImage(newPhotosInAlbum.photos);
     for (const key of Object.keys(newPhotosInAlbum.photos)) {
       data.append("images", newPhotosInAlbum.photos[key]);
     }
 
-    console.log(data.images);
-
-    axios.post(`${url}/dodajzdjecia`, data).then((res) => {
-      setMsg(res.data.msg);
-      setTimeout(() => {
-        // window.location.reload();
-      }, 3000);
-    });
+    await axios
+      .post(`${url}/dodajzdjecia`, data, {
+        headers: {
+          accessToken: localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        setMsg(res.data.msg);
+        setTimeout(() => {
+          // window.location.reload();
+        }, 3000);
+      });
   };
 
   return (
@@ -319,6 +336,7 @@ export default function AdminPanel() {
               className={`${styles.input_file}`}
               multiple
               onChange={(e) => {
+                console.log(e.target.files);
                 setNewPhotosInAlbum({
                   ...newPhotosInAlbum,
                   photos: e.target.files,

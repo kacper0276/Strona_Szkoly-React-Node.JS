@@ -82,11 +82,17 @@ export default function DeleteAlbum() {
   }
 
   async function deleteAlbum() {
-    axios.get(`${url}/deletealbum/${albumEditData.id}`).then((res) => {
-      if (res.data.msg) {
-        window.location.reload();
-      }
-    });
+    axios
+      .get(`${url}/deletealbum/${albumEditData.id}`, {
+        headers: {
+          accessToken: localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        if (res.data.msg) {
+          window.location.reload();
+        }
+      });
   }
 
   async function editAlbum(e) {
@@ -97,11 +103,17 @@ export default function DeleteAlbum() {
     data.append("image", albumEditData.newImage);
     data.append("schoolYear", albumEditData.schoolYear);
 
-    axios.post(`${url}/editalbum/${albumEditData.id}`, data).then((res) => {
-      if (res.data.msg) {
-        window.location.reload();
-      }
-    });
+    axios
+      .post(`${url}/editalbum/${albumEditData.id}`, data, {
+        headers: {
+          accessToken: localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        if (res.data.msg) {
+          window.location.reload();
+        }
+      });
   }
 
   useEffect(() => {

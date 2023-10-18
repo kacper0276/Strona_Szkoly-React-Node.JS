@@ -17,7 +17,15 @@ export default function DeleteSchoolYear() {
     e.preventDefault();
 
     axios
-      .post(`${url}/deleteyear/${deleteAlbumData.schoolYearId}`)
+      .post(
+        `${url}/deleteyear/${deleteAlbumData.schoolYearId}`,
+        {},
+        {
+          headers: {
+            accessToken: localStorage.getItem("token"),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         if (res.data.msg) {
@@ -34,7 +42,11 @@ export default function DeleteSchoolYear() {
     data.append("image", deleteAlbumData.photo);
 
     axios
-      .post(`${url}/updateYear/${deleteAlbumData.schoolYearId}`, data)
+      .post(`${url}/updateYear/${deleteAlbumData.schoolYearId}`, data, {
+        headers: {
+          accessToken: localStorage.getItem("token"),
+        },
+      })
       .then((res) => {
         window.location.reload();
       });

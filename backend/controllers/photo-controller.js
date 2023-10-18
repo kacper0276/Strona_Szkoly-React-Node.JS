@@ -13,7 +13,7 @@ class photoController {
         const width = imgData.width;
         const height = imgData.height;
         await sharp(image.path)
-          .resize(Math.round(width * 0.7), Math.round(height * 0.7))
+          .resize(Math.round(width * 0.4), Math.round(height * 0.4))
           .toFormat("jpeg")
           .jpeg({ quality: 100 })
           .toFile(`./build/photos/${name}`);
@@ -26,7 +26,7 @@ class photoController {
 
     const year = req.body.year,
       album = req.body.album;
-    let namesPhoto = [];
+    var namesPhoto = [];
 
     sharp.cache(false);
 
@@ -35,7 +35,7 @@ class photoController {
     });
 
     dbConnect.query(
-      "INSERT INTO photosinalbum (years, name_album, name_photo) VALUES (?, ?, ?)",
+      "INSERT INTO `photosinalbum`(`years`, `name_album`, `name_photo`) VALUES (?, ?, ?)",
       [year, album, JSON.stringify(namesPhoto)],
       (err, result) => {
         if (err) throw err;
