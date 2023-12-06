@@ -1,15 +1,7 @@
-// const connection = require("../helpers/databaseConnection");
+const connection = require("../helpers/databaseConnection");
 const { path } = require("app-root-path");
 const mysql = require("mysql2");
-const url = require("url");
-
-const connection = mysql.createConnection({
-  host: "mariadb106.zszbrodnica.nazwa.pl",
-  user: "zszbrodnica_strona22",
-  password: "KacperRenkel2022.",
-  database: "zszbrodnica_strona22",
-  multipleStatements: true,
-});
+const url = require("url");
 
 class showController {
   async showMainPage(req, res) {
