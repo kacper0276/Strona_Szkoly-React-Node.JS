@@ -6,8 +6,6 @@ import DeleteInAdminPanel from "../DeleteInAdminPanel/DeleteInAdminPanel";
 import { url } from "../../App";
 import LoginContext from "../../context/LoginContext";
 import { Link, useNavigate } from "react-router-dom";
-import Resizer from "react-image-file-resizer";
-import { getImageSize } from "react-image-size";
 // import resizeImage from "../../functions/resizeImage";
 
 export default function AdminPanel() {

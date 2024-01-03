@@ -32,6 +32,7 @@ import PhotosInGallery from "./pages/Gallery/PhotosInGallery/PhotosInGallery";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import AdminPanel from "./pages/AdminPanel/AdminPanel";
 import AuthtenticatedRoute from "./hok/AuthenticatedRoute";
+import NotFound from "./pages/notfound";
 // export const url = window.location.origin+'/api';
 // export const url = "http://strona2022.ckziubrodnica.pl/api";
 export const url = "https://ckziubrodnica.pl/api";
@@ -153,7 +154,7 @@ const App = () => {
                         element={<ReadMore />}
                       />
                       <Route path="/content/*" element={<Content />} />
-                      <Route path="*" element={<Mainpage />} />
+                      <Route path="*" element={<NotFound />} />
                     </Routes>
                   </main>
                   <Footer />
