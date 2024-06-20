@@ -38,14 +38,19 @@ Map page
 ## Installation
 
 For front-end and back-end
+
 npm install
 
 To start the front-end
+
 cd frontend
+
 npm run start
 
 To start the back-end
+
 cd backend
+
 npm run watch
 
 School Page NodeJS React is built with the following tools and libraries: <ul><li>Node.JS</li> <li>React</li> <li>MySQL</li> <li>Express.JS</li> <li>Multer</li> <li>Sharp</li> <li>TinyMCE</li> <li>JSON WEB TOKEN</li></ul>
